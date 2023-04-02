@@ -37,6 +37,7 @@ export default class Home extends Lightning.Component {
   async _init() {
     this.borderIndex = 0;
     const data = await fetchMovies();
+    this.movies = data.results;
     this.tag("Movies").add(
       data.results.map((m) => ({
         src: `https://image.tmdb.org/t/p/original${m.poster_path}`,
@@ -79,10 +80,7 @@ export default class Home extends Lightning.Component {
   }
 
   _handleEnter() {
-    console.log("INDEX", this.tag("Movies").index);
-  }
-
-  _handleEnter() {
-    Router.navigate("/movies/1");
+    const id = this.movies[this.tag("Movies").index].id;
+    Router.navigate(`/movies/${id}`);
   }
 }
