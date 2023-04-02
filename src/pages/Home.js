@@ -17,7 +17,7 @@ export default class Home extends Lightning.Component {
       },
       Border: {
         rect: true,
-        w: 270,
+        w: 276,
         h: 420,
         y: 540,
         mountY: 0.5,
@@ -41,7 +41,7 @@ export default class Home extends Lightning.Component {
       data.results.map((m) => ({
         src: `https://image.tmdb.org/t/p/original${m.poster_path}`,
         h: 400,
-        w: 250,
+        w: 256,
         mountY: 0.5,
         margin: 10,
       }))
@@ -51,14 +51,15 @@ export default class Home extends Lightning.Component {
   _handleRight() {
     this.tag("Movies").setIndex(this.tag("Movies").index + 1);
     const idx = this.tag("Movies").index;
-    if (this.borderIndex >= 6) {
+    if (this.borderIndex > 5) {
       return;
     }
     this.borderIndex += 1;
-    console.log(this.borderIndex);
+
     this.tag("Border").patch({
       smooth: {
-        x: this.borderIndex * 270,
+        // x: this.borderIndex === 7 ? 1660 : this.borderIndex * 270,
+        x: this.borderIndex * 276,
       },
     });
   }
@@ -67,12 +68,12 @@ export default class Home extends Lightning.Component {
     this.tag("Movies").setIndex(this.tag("Movies").index - 1);
     const idx = this.tag("Movies").index;
     if (this.borderIndex === 0) {
-      returnk;
+      return;
     }
     this.borderIndex -= 1;
     this.tag("Border").patch({
       smooth: {
-        x: this.borderIndex * 270,
+        x: this.borderIndex * 276,
       },
     });
   }
@@ -81,11 +82,7 @@ export default class Home extends Lightning.Component {
     console.log("INDEX", this.tag("Movies").index);
   }
 
-  // _getFocused() {
-  //   return this.tag("Movies");
-  // }
-
-  // _handleUp() {
-  //   Router.focusWidget("Menu");
-  // }
+  _handleEnter() {
+    Router.navigate("/movies/1");
+  }
 }
