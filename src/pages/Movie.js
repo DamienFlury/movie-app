@@ -63,6 +63,9 @@ export default class Movie extends Lightning.Component {
       },
     };
   }
+  pageTransition() {
+    return "up";
+  }
 
   /**
    * @param {{ id: { id: string }; }} args

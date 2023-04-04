@@ -4,7 +4,8 @@
       "clearColor": "0x00000000",
       "useImageWorker": true
     },
-    "debug": false
+    "debug": false,
+    "tmdb_api_key": "<api key for TMDB goes here>"
   },
   "platformSettings": {
     "path": "./static",

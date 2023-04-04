@@ -1,5 +1,7 @@
-const key = "63bddd9820a8a4d4b4159ae751eaff78";
+import { Settings } from "@lightningjs/sdk";
+
 export const fetchMovies = async () => {
+  const key = Settings.get("app", "tmdb_api_key");
   const response = await fetch(
     `https://api.themoviedb.org/3/trending/movie/week?api_key=${key}`
   );
@@ -7,6 +9,7 @@ export const fetchMovies = async () => {
 };
 
 export const fetchMovieById = async (id) => {
+  const key = Settings.get("app", "tmdb_api_key");
   const response = await fetch(
     `https://api.themoviedb.org/3/movie/${id}?api_key=${key}&language=en-US`
   );
@@ -14,6 +17,7 @@ export const fetchMovieById = async (id) => {
 };
 
 export const getRecommendations = async (id) => {
+  const key = Settings.get("app", "tmdb_api_key");
   const response = await fetch(
     `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${key}`
   );
@@ -21,6 +25,7 @@ export const getRecommendations = async (id) => {
 };
 
 export const searchMovies = async (searchQuery) => {
+  const key = Settings.get("app", "tmdb_api_key");
   const response = await fetch(
     `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${searchQuery}`
   );

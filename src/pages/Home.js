@@ -70,7 +70,7 @@ export default class Home extends Lightning.Component {
     };
   }
   pageTransition() {
-    return "up";
+    return "down";
   }
   _handleBack() {
     this.searchText = this.searchText.slice(0, -1);
