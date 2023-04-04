@@ -125,13 +125,6 @@ export default class Home extends Lightning.Component {
       return;
     }
 
-    const isLetter = input >= "a" && input <= "z";
-    const isNumber = input >= "0" && input <= "9";
-
-    if (!isLetter && !isNumber) {
-      return;
-    }
-
     this.searchText += key.key;
     this.tag("SearchBox").patch({
       text: {
