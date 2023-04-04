@@ -19,3 +19,10 @@ export const getRecommendations = async (id) => {
   );
   return response.json();
 };
+
+export const searchMovies = async (searchQuery) => {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${searchQuery}`
+  );
+  return response.json();
+};

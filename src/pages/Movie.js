@@ -95,6 +95,7 @@ export default class Movie extends Lightning.Component {
     });
 
     getRecommendations(args.id).then((data) => {
+      this.tag("Recommendations").clear();
       this.tag("Recommendations").add(
         data.results.map((m) => ({
           src: `https://image.tmdb.org/t/p/original${m.poster_path}`,

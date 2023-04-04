@@ -1,6 +1,6 @@
 import { Lightning, Router } from "@lightningjs/sdk";
-import { fetchMovies } from "../lib/api";
-import { List } from "@lightningjs/ui";
+import { fetchMovies, searchMovies } from "../lib/api";
+import { InputField, Keyboard, List } from "@lightningjs/ui";
 
 export default class Home extends Lightning.Component {
   _handleEnter() {
@@ -24,6 +24,16 @@ export default class Home extends Lightning.Component {
         },
         w: 1920,
         h: 1080,
+      },
+      SearchBox: {
+        rect: true,
+        x: 960,
+        y: 20,
+        w: 200,
+        mountX: 0.5,
+        text: {
+          text: "Search",
+        },
       },
       Border: {
         rect: true,
@@ -62,6 +72,91 @@ export default class Home extends Lightning.Component {
   pageTransition() {
     return "up";
   }
+  _handleBack() {
+    this.searchText = this.searchText.slice(0, -1);
+
+    this.tag("SearchBox").patch({
+      text: {
+        text: this.searchText,
+      },
+    });
+
+    this.timeout = setTimeout(() => {
+      if (this.searchText === "") {
+        fetchMovies().then((data) => {
+          this.tag("Movies").clear();
+          this.tag("Movies").add(
+            data.results.map((m) => ({
+              src: `https://image.tmdb.org/t/p/original${m.poster_path}`,
+              h: 400,
+              w: 256,
+              mountY: 0.5,
+              margin: 10,
+            }))
+          );
+          this.movies = data.results;
+        });
+        this.tag("SearchBox").patch({
+          text: {
+            text: "Search...",
+          },
+        });
+        return;
+      }
+      searchMovies(this.searchText).then((data) => {
+        this.tag("Movies").clear();
+        this.tag("Movies").add(
+          data.results.map((m) => ({
+            src: `https://image.tmdb.org/t/p/original${m.poster_path}`,
+            h: 400,
+            w: 256,
+            mountY: 0.5,
+            margin: 10,
+          }))
+        );
+        this.movies = data.results;
+      });
+    }, 400);
+  }
+
+  _handleKey(key) {
+    const input = key.key.toLowerCase();
+    if (input.length !== 1) {
+      return;
+    }
+
+    const isLetter = input >= "a" && input <= "z";
+    const isNumber = input >= "0" && input <= "9";
+
+    if (!isLetter && !isNumber) {
+      return;
+    }
+
+    this.searchText += key.key;
+    this.tag("SearchBox").patch({
+      text: {
+        text: this.searchText,
+      },
+    });
+
+    clearTimeout(this.timeout);
+
+    this.timeout = setTimeout(() => {
+      searchMovies(this.searchText).then((data) => {
+        this.tag("Movies").clear();
+        this.tag("Movies").add(
+          data.results.map((m) => ({
+            src: `https://image.tmdb.org/t/p/original${m.poster_path}`,
+            h: 400,
+            w: 256,
+            mountY: 0.5,
+            margin: 10,
+          }))
+        );
+        this.movies = data.results;
+      });
+    }, 400);
+  }
 
   setDescription() {
     this.tag("Plot").patch({
@@ -71,6 +166,7 @@ export default class Home extends Lightning.Component {
     });
   }
   async _init() {
+    this.searchText = "";
     this.borderIndex = 0;
     const data = await fetchMovies();
     this.movies = data.results;
