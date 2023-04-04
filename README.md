@@ -14,7 +14,7 @@ npm install -g @lightningjs/cli
 
 To get the app running correctly and being able to fetch all the data, copy the settings_example.json into settings.json and set the `tmdb_api_key`.
 
-```bash
+```sh
 cp settings_example.json settings.json
 ```
 
