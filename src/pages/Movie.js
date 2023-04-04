@@ -1,5 +1,6 @@
 import { Lightning } from "@lightningjs/sdk";
-import { fetchMovieById } from "../lib/api";
+import { fetchMovieById, getRecommendations } from "../lib/api";
+import { List } from "@lightningjs/ui";
 
 export default class Movie extends Lightning.Component {
   static _template() {
@@ -20,28 +21,45 @@ export default class Movie extends Lightning.Component {
         w: 1920,
         h: 1080,
       },
-      Title: {
-        x: 960,
+      Image: {
+        x: 700,
         y: 120,
-        mount: 0.5,
+        w: 240,
+        h: 400,
+      },
+      Title: {
+        x: 1000,
+        y: 120,
       },
       Description: {
-        x: 960,
+        x: 1000,
         y: 420,
-        w: 820,
-        mount: 0.5,
+        w: 640,
         text: {
           fontSize: 20,
           lineHeight: 20,
         },
       },
       ReleaseDate: {
-        x: 960,
+        x: 1000,
         y: 240,
-        mount: 0.5,
         text: {
           fontSize: 25,
         },
+      },
+      RecommendationsText: {
+        y: 640,
+        x: 960,
+        mountX: 0.5,
+        text: {
+          fontSize: 30,
+          text: "Recommendations",
+        },
+      },
+      Recommendations: {
+        y: 740,
+        type: List,
+        direction: "row",
       },
     };
   }
@@ -71,6 +89,20 @@ export default class Movie extends Lightning.Component {
           ),
         },
       });
+      this.tag("Image").patch({
+        src: `https://image.tmdb.org/t/p/original${res.poster_path}`,
+      });
+    });
+
+    getRecommendations(args.id).then((data) => {
+      this.tag("Recommendations").add(
+        data.results.map((m) => ({
+          src: `https://image.tmdb.org/t/p/original${m.poster_path}`,
+          h: 280,
+          w: 160,
+          margin: 10,
+        }))
+      );
     });
   }
 }

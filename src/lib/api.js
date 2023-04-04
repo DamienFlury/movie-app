@@ -12,3 +12,10 @@ export const fetchMovieById = async (id) => {
   );
   return response.json();
 };
+
+export const getRecommendations = async (id) => {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${key}`
+  );
+  return response.json();
+};
